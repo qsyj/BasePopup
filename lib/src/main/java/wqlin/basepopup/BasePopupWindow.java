@@ -53,8 +53,8 @@ import wqlin.basepopup.entity.LocationType;
 import wqlin.basepopup.entity.PopupConfig;
 import wqlin.basepopup.util.PopupHelper;
 import wqlin.library.R;
-import wqlin.util.InputMethodUtils;
-import wqlin.util.SimpleAnimUtil;
+import wqlin.basepopup.util.InputMethodUtils;
+import wqlin.basepopup.util.SimpleAnimUtil;
 
 /**
  * Created by wqlin on 2017/9/14.

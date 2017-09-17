@@ -1,4 +1,4 @@
-package wqlin.util;
+package wqlin.basepopup.util;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;

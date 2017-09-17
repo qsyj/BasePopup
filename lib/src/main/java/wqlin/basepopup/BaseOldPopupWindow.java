@@ -44,8 +44,8 @@ import java.lang.reflect.Field;
 
 import wqlin.basepopup.callback.OnDismissListener;
 import wqlin.library.R;
-import wqlin.util.InputMethodUtils;
-import wqlin.util.SimpleAnimUtil;
+import wqlin.basepopup.util.InputMethodUtils;
+import wqlin.basepopup.util.SimpleAnimUtil;
 
 /**
  * Created by wqlin on 2017/9/14.

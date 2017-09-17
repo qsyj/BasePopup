@@ -22,7 +22,7 @@ import wqlin.basepopup.entity.LocationSizeInfo;
 import wqlin.basepopup.entity.LocationType;
 import wqlin.basepopup.util.PopupHelper;
 
-import static wqlin.util.SimpleAnimUtil.getScaleAnimation;
+import static wqlin.basepopup.util.SimpleAnimUtil.getScaleAnimation;
 
 /**
  * Created by wqlin on 2016/1/16.
