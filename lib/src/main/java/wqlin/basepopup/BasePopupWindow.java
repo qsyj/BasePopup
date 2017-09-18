@@ -290,6 +290,10 @@ public abstract class BasePopupWindow implements BasePopup, PopupWindow.OnDismis
 
         mPopupWindow = new PopupWindowProxy(mPopupView, getWidth(), getHeight(), this);
 
+        //===============================================dimiss listener=========================================
+        mPopupWindow.setOnDismissListener(mPopupConfig.getDismissListener());
+        //===============================================dimiss listener  end====================================
+
         //===============================================动画================================================
         if (mPopupConfig.getAnimaStyleRes() > 0) {
             try {
