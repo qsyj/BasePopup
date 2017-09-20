@@ -31,6 +31,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,10 +52,10 @@ import wqlin.basepopup.entity.LocationConsumer;
 import wqlin.basepopup.entity.LocationSizeInfo;
 import wqlin.basepopup.entity.LocationType;
 import wqlin.basepopup.entity.PopupConfig;
-import wqlin.basepopup.util.PopupHelper;
-import wqlin.library.R;
 import wqlin.basepopup.util.InputMethodUtils;
+import wqlin.basepopup.util.PopupHelper;
 import wqlin.basepopup.util.SimpleAnimUtil;
+import wqlin.library.R;
 
 /**
  * Created by wqlin on 2017/9/14.
@@ -108,6 +109,7 @@ public abstract class BasePopupWindow implements BasePopup, PopupWindow.OnDismis
         mAnimaView = initAnimaView();
 
         setDismissWhenTouchOuside(true);
+        setBackPressEnable(true);
 
         //=============================================================为外层的view添加点击事件，并设置点击消失
         mDismissView = getClickToDismissView();
@@ -290,10 +292,6 @@ public abstract class BasePopupWindow implements BasePopup, PopupWindow.OnDismis
 
         mPopupWindow = new PopupWindowProxy(mPopupView, getWidth(), getHeight(), this);
 
-        //===============================================dimiss listener=========================================
-        mPopupWindow.setOnDismissListener(mPopupConfig.getDismissListener());
-        //===============================================dimiss listener  end====================================
-
         //===============================================动画================================================
         if (mPopupConfig.getAnimaStyleRes() > 0) {
             try {
@@ -310,6 +308,12 @@ public abstract class BasePopupWindow implements BasePopup, PopupWindow.OnDismis
         //===============================================动画  end================================================
 
 
+        //===============================================dismiss监听===============================================
+        if (mPopupConfig.getDismissListener() != null) {
+            mPopupWindow.setOnDismissListener(mPopupConfig.getDismissListener());
+        }
+        //===============================================dismiss监听  end===============================================
+
         //========================点击外部是否消失================================================================
         if (mPopupConfig.isDismissWhenTouchOuside()) {
             //指定透明背景，back键相关
@@ -321,17 +325,29 @@ public abstract class BasePopupWindow implements BasePopup, PopupWindow.OnDismis
             mPopupWindow.setOutsideTouchable(false);
             mPopupWindow.setBackgroundDrawable(null);
         }
-    //========================点击外部是否消失  end================================================================
+        //========================点击外部是否消失  end================================================================
 
 
-    //========================点击返回键是否可以取消掉PopupWindow=============================================
-        if (mPopupConfig.isBackPressEnable()) {
-            mPopupWindow.setBackgroundDrawable(new ColorDrawable());
-        } else {
+        //========================点击返回键是否可以取消掉PopupWindow=============================================
+        if (!mPopupConfig.isBackPressEnable()) {
             mPopupWindow.setBackgroundDrawable(null);
+        } else if (mPopupConfig.isBackPressEnable()){
+            mPopupView.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        if (mPopupWindow != null) {
+                            mPopupWindow.dismiss();
+                        }
+                    }
+                    return false;
+                }
+            });
         }
 
-        //全屏
+        //========================点击返回键是否可以取消掉PopupWindow  end=============================================
+
+        //=======================================全屏================================================================
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
                 Field mLayoutInScreen = PopupWindow.class.getDeclaredField("mLayoutInScreen");
@@ -345,7 +361,7 @@ public abstract class BasePopupWindow implements BasePopup, PopupWindow.OnDismis
                 e.printStackTrace();
             }
         }
-        //========================点击返回键是否可以取消掉PopupWindow  end=============================================
+        //=======================================全屏  end================================================================
 
         //========================键盘===============================================================================
         if (mPopupConfig.isNeedAdjust()) {
